@@ -1,8 +1,4 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
   <router-view/>
 </template>
 
@@ -13,18 +9,23 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100vh;
+
 }
 
-nav {
-  padding: 30px;
+.home4h {
+  padding: 2vh;
+  height: 100vh;
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.talk4h {
+  height: 96vh;
+  overflow: auto scroll;
 }
 
-nav a.router-link-exact-active {
-  color: #42b983;
+@media (max-width: 700px) {
+  .ant-comment-avatar {
+    margin-right:0 !important;
+  }
 }
 </style>
