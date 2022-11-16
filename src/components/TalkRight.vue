@@ -10,11 +10,11 @@
       <template #content>
         <a-form-item>
           <a-row>
-            <a-col :xs="24" :sm="18" :md="18" :xl="18">
+            <a-col :xs="24" :sm="20" :md="20" :xl="20">
               <a-textarea class="message" v-model:value="message" :rows="smallMedia?1:4" @paste="fileChange"  v-focus
                           ref="messageInput" @keydown.enter="handleEnter" />
             </a-col>
-            <a-col :xs="0" :sm="6" :md="6" :xl="6">
+            <a-col :xs="0" :sm="4" :md="4" :xl="4">
               <a-upload-dragger
                   name="file"
                   :before-upload="beforeUpload"
@@ -22,10 +22,6 @@
               >
                 <p class="ant-upload-drag-icon">
                   <inbox-outlined></inbox-outlined>
-                </p>
-                <p class="ant-upload-text">上传图片</p>
-                <p class="ant-upload-hint">
-                  点击或者拖动图片到此
                 </p>
               </a-upload-dragger>
             </a-col>
