@@ -17,20 +17,24 @@ function talkButtonClicked() {
   }
 }
 
-// eslint-disable-next-line no-unused-vars
-function load() {
+window.onload = () => {
   let ciframe = document.createElement("iframe");
   ciframe.id='talk';
   // eslint-disable-next-line no-undef
   ciframe.src= talk_customer_url;
   ciframe.className='float-talk';
   document.body.appendChild(ciframe);
+  ciframe.style.display='none';
   ciframe = null;
 
   const btn = document.createElement("input");
   btn.type = "button";
-  btn.value = "客服";
-  btn.id="btn";
+  if (typeof(talk_button_text) != 'undefined' && talk_button_text) {
+    btn.value = talk_button_text;
+  } else {
+    btn.value = "客服";
+  }
+
   btn.className="float-button";
   btn.addEventListener('click', talkButtonClicked);
   document.body.appendChild(btn);
@@ -50,7 +54,7 @@ function load() {
 
   if (iframe.attachEvent) { // IE
     iframe.onreadystatechange = () => {
-      if (iframe.readystate == 'complete') {
+      if (iframe.readystate === 'complete') {
         sendTalkToken()
       }
     }
@@ -58,5 +62,4 @@ function load() {
   iframe.onload = () => {
     sendTalkToken()
   }
-
 }
