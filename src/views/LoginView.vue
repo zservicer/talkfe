@@ -5,7 +5,7 @@
         <a-input v-model:value="formState.username" />
       </a-form-item>
       <a-form-item label="Password" name="password">
-        <a-input type="password" v-model:value="formState.password" />
+        <a-input type="password" v-model:value="formState.password" @keydown.enter="doLogin" />
       </a-form-item>
       <a-form-item>
         <a-button type="primary" @click="doLogin">Submit</a-button>
