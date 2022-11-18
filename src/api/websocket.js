@@ -15,6 +15,10 @@ export default class SocketService {
   wsUrl = '';
   token = '';
 
+  setToken(token) {
+    this.token = token
+  }
+
   connect(token) {
     if (token) {
       this.token = token;

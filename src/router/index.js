@@ -7,7 +7,10 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta:{
+      title: '客服系统'
+    },
   },
   {
     path: '/customer',
@@ -17,7 +20,10 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: LoginView
+    component: LoginView,
+    meta:{
+      title: '登录'
+    },
   },
   {
     path: '/about',

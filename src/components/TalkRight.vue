@@ -23,6 +23,7 @@
                 <p class="ant-upload-drag-icon">
                   <inbox-outlined></inbox-outlined>
                 </p>
+                <p class="ant-upload-text">上传图片</p>
               </a-upload-dragger>
             </a-col>
           </a-row>

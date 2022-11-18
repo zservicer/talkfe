@@ -32,3 +32,8 @@ app.directive('focus', {
         el.focus()
     }
 })
+
+router.beforeEach((to, from, next) => {
+    document.title = to.meta.title ? to.meta.title : 'TalkFe';
+    next()
+})

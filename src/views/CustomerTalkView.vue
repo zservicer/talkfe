@@ -2,10 +2,10 @@
   <div class="home4h">
     <div v-if="userName" style="position: fixed;top:0; ">Hello, {{ userName }}</div>
     <div>
-      <TalkRight v-if="userName !== null && !newCreateFlag" :talk-id="talkId" :messages-in="messages" :customer-mode="true" />
+      <TalkRight v-if="tokenOk && !newCreateFlag" :talk-id="talkId" :messages-in="messages" :customer-mode="true" />
       <e-row v-else>
         <a-form>
-          <a-form-item label="您的称呼" name="username">
+          <a-form-item label="您的称呼" name="username" v-if="!tokenOk">
             <a-input v-model:value="formState.username" />
           </a-form-item>
           <a-form-item label="问题描述" name="title">
@@ -44,6 +44,7 @@ export default {
   },
   setup() {
     const token = ref('');
+    const tokenOk = ref(false);
     const userName = ref(null);
     const talkId = ref('');
     const messages = ref([]);
@@ -59,10 +60,8 @@ export default {
     const parentMessage = (e) => {
       if (e.data['target'] === 'customer') {
         if (e.data['token']) {
-          token.value = e.data['token']
-          ws.connect(token.value)
+          queryToken(e.data['token'])
         }
-        queryToken()
       }
     }
 
@@ -107,9 +106,17 @@ export default {
           open.setTalkId(talkId.value);
           talkStartRequest.setOpen(open);
         } else {
+          if (formState.title === "") {
+            newCreateFlag.value = true
+            ws.finishConnect()
+
+            return
+          }
           const create = new TalkCreateRequest();
           create.setTitle(formState.title);
           talkStartRequest.setCreate(create);
+
+          formState.title = ''
         }
         ws.send(talkStartRequest.serializeBinary().buffer)
       }).catch(e => {
@@ -118,6 +125,12 @@ export default {
     }
 
     const createToken = () => {
+      if (tokenOk.value) {
+        queryToken(token.value)
+
+        return
+      }
+
       if (formState.title === '') {
         formState.title = '咨询'
       }
@@ -134,22 +147,24 @@ export default {
         url: process.env.VUE_APP_URL_BASE_CUSTOMER+"/createToken",
         data: req.serializeBinary().buffer,
       }).then((resp)=> {
-        newCreateFlag.value = false
-
         const pbResp = CreateTokenResponse.deserializeBinary(resp.data)
         token.value = pbResp.getToken()
-        ws.connect(token.value)
         userName.value = pbResp.getUserName()
         window.parent.postMessage({
           'token': pbResp.getToken(),
           target: 'customer',
         }, '*')
 
+        tokenOk.value = true
+        ws.setToken(token.value)
         ws.startConnect()
       })
     }
 
-    const queryToken = () => {
+    const queryToken = (tkn) => {
+      token.value = tkn
+      tokenOk.value = false
+
       ctx.$axios({
         method: "get",
         headers: {
@@ -159,6 +174,8 @@ export default {
       }).then((resp)=>{
         const pbResp = CheckTokenResponse.deserializeBinary(resp.data)
         if (pbResp.getValid()) {
+          tokenOk.value = true
+
           token.value = pbResp.getNewToken();
           userName.value = pbResp.getUserName();
 
@@ -167,6 +184,8 @@ export default {
             target: 'customer',
           }, '*')
 
+          newCreateFlag.value = false
+          ws.setToken(pbResp.getNewToken());
           ws.startConnect()
         }
       }).catch(e => {
@@ -175,7 +194,6 @@ export default {
     }
 
     const ws = reactive(new SocketService(process.env.VUE_APP_WS_CUSTOMER, ''));
-
 
     ws.registerCallBack('open', () => {
       startTalk()
@@ -247,13 +265,13 @@ export default {
 
     return {
       formState,
-      queryToken,
       createToken,
       userName,
       talkId,
       messages,
       parentMessage,
-      newCreateFlag
+      newCreateFlag,
+      tokenOk
     }
   }
 }
