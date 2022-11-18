@@ -60,6 +60,7 @@ export default {
       if (e.data['target'] === 'customer') {
         if (e.data['token']) {
           token.value = e.data['token']
+          ws.connect(token.value)
         }
         queryToken()
       }
@@ -98,27 +99,19 @@ export default {
       }).then((resp)=>{
         const pbResp = QueryTalksResponse.deserializeBinary(resp.data)
         const pbTalkList = pbResp.getTalksList();
+        const talkStartRequest = new TalkRequest();
+
         if (pbTalkList.length > 0) {
           talkId.value = pbTalkList[0].getTalkId();
           const open = new TalkOpenRequest();
           open.setTalkId(talkId.value);
           talkStartRequest.setOpen(open);
-          ws.startConnect()
         } else {
-          if (formState.title === '') {
-            newCreateFlag.value = true
-            ws.finishConnect()
-
-            return
-          }
-
           const create = new TalkCreateRequest();
           create.setTitle(formState.title);
           talkStartRequest.setCreate(create);
-          ws.startConnect()
         }
-
-        ws.connect(token.value)
+        ws.send(talkStartRequest.serializeBinary().buffer)
       }).catch(e => {
         message.error('startTalk:', e)
       })
@@ -145,13 +138,14 @@ export default {
 
         const pbResp = CreateTokenResponse.deserializeBinary(resp.data)
         token.value = pbResp.getToken()
+        ws.connect(token.value)
         userName.value = pbResp.getUserName()
         window.parent.postMessage({
           'token': pbResp.getToken(),
           target: 'customer',
         }, '*')
 
-        startTalk()
+        ws.startConnect()
       })
     }
 
@@ -173,19 +167,18 @@ export default {
             target: 'customer',
           }, '*')
 
-          startTalk()
+          ws.startConnect()
         }
       }).catch(e => {
         message.error(e)
       })
     }
 
-    const talkStartRequest = new TalkRequest();
     const ws = reactive(new SocketService(process.env.VUE_APP_WS_CUSTOMER, ''));
 
 
     ws.registerCallBack('open', () => {
-      ws.send(talkStartRequest.serializeBinary().buffer)
+      startTalk()
     })
 
     ws.registerCallBack('close', () => {
@@ -257,7 +250,6 @@ export default {
       queryToken,
       createToken,
       userName,
-      startTalk,
       talkId,
       messages,
       parentMessage,
