@@ -43,7 +43,9 @@ window.onload = () => {
   const sendTalkToken = () => {
     iframe.contentWindow.postMessage({
       target: 'customer',
-      token: window.localStorage.getItem('talkToken')
+      token: window.localStorage.getItem('talkToken'),
+      actID: talk_act_id,
+      bizID: talk_biz_id,
     }, '*')
   }
 

@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import {Button,Switch,Collapse, List, Avatar, Row, Col, Badge, Image, Comment, Input, Form, Upload } from 'ant-design-vue'
+import {Button,Switch,Collapse, List, Avatar, Row, Col, Badge, Image, Comment, Input, Form, Upload, message } from 'ant-design-vue'
 import * as antIcons from "@ant-design/icons-vue"
 import axios from '@/api/axios.js'
 import moment from "moment";
@@ -22,6 +22,7 @@ app.use(PerfectScrollbar)
 
 app.use(store).use(router).mount('#app')
 
+app.config.globalProperties.$message = message;
 app.config.globalProperties.$axios = axios
 app.config.globalProperties.$dateFormat = (date) => {
     return moment(date).format('YYYY-MM-DD HH:mm:ss')

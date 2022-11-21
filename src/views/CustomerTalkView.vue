@@ -24,6 +24,7 @@
 import TalkRight from '@/components/TalkRight.vue'
 import {getCurrentInstance, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref} from "vue";
 import {
+  CheckTokenRequest,
   CheckTokenResponse,
   CreateTokenRequest,
   CreateTokenResponse,
@@ -43,6 +44,8 @@ export default {
     TalkRight
   },
   setup() {
+    const actID = ref('');
+    const bizID = ref('');
     const token = ref('');
     const tokenOk = ref(false);
     const userName = ref(null);
@@ -59,6 +62,8 @@ export default {
 
     const parentMessage = (e) => {
       if (e.data['target'] === 'customer') {
+        actID.value = e.data['actID']
+        bizID.value = e.data['bizID']
         if (e.data['token']) {
           queryToken(e.data['token'])
         }
@@ -141,6 +146,8 @@ export default {
 
       const req = new CreateTokenRequest();
       req.setUserName(formState.username);
+      req.setActId(actID.value);
+      req.setBizId(bizID.value);
 
       ctx.$axios({
         method: "post",
@@ -165,12 +172,17 @@ export default {
       token.value = tkn
       tokenOk.value = false
 
+      const req = new CheckTokenRequest();
+      req.setActId(actID.value);
+      req.setBizId(bizID.value);
+
       ctx.$axios({
-        method: "get",
+        method: "post",
         headers: {
           'token': token.value,
         },
         url: process.env.VUE_APP_URL_BASE_CUSTOMER+"/checkToken",
+        data: req.serializeBinary().buffer,
       }).then((resp)=>{
         const pbResp = CheckTokenResponse.deserializeBinary(resp.data)
         if (pbResp.getValid()) {

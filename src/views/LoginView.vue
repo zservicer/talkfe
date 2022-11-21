@@ -45,6 +45,9 @@ export default {
       }).then((resp)=> {
         store.commit('servicerToken', resp.data.token)
         router.push('/')
+      }).catch(e => {
+        console.log(e)
+        ctx.$message.error("登录失败：["+e.code+"]" + " " + e.message)
       })
     }
 
