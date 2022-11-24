@@ -1,9 +1,11 @@
 <template>
   <div class="home4h">
-    <div v-if="userName" style="position: fixed;top:0; ">Hello, {{ userName }}</div>
     <div>
-      <TalkRight v-if="tokenOk && !newCreateFlag" :talk-id="talkId" :messages-in="messages" :customer-mode="true" />
-      <e-row v-else>
+      <div  v-if="tokenOk && !newCreateFlag">
+        <div v-if="userName" style="position: fixed;top:0; ">Hello, {{ userName }}</div>
+        <TalkRight :talk-id="talkId" :messages-in="messages" :customer-mode="true" />
+      </div>
+      <div v-else>
         <a-form>
           <a-form-item label="您的称呼" name="username" v-if="!tokenOk">
             <a-input v-model:value="formState.username" />
@@ -15,7 +17,7 @@
             <a-button type="primary" @click="createToken">Submit</a-button>
           </a-form-item>
         </a-form>
-      </e-row>
+      </div>
     </div>
   </div>
 </template>
@@ -119,9 +121,8 @@ export default {
           }
           const create = new TalkCreateRequest();
           create.setTitle(formState.title);
-          talkStartRequest.setCreate(create);
 
-          formState.title = ''
+          talkStartRequest.setCreate(create);
         }
         ws.send(talkStartRequest.serializeBinary().buffer)
       }).catch(e => {
@@ -211,7 +212,12 @@ export default {
       startTalk()
     })
 
-    ws.registerCallBack('close', () => {
+    ws.registerCallBack('close', (e) => {
+      if (e.code === 16 || e.code === 1005) {
+        ws.finishConnect()
+        tokenOk.value = false
+        token.value = ''
+      }
     })
 
     ws.registerCallBack('message', (message) => {
@@ -264,9 +270,7 @@ export default {
       ws.send(request.serializeBinary().buffer)
       ws.finishConnect()
 
-      formState.title = ''
       newCreateFlag.value = true
-      token.value = ''
       userName.value = ''
     }
     provide('CloseTalk', closeTalk)

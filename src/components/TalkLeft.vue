@@ -10,8 +10,9 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch } from 'vue';
+import {defineComponent, onMounted, ref, watch} from 'vue';
 import LeftItem from "@/components/LeftItem";
+import PerfectScrollbar from 'perfect-scrollbar';
 
 export default defineComponent({
   components: {LeftItem},
@@ -28,6 +29,12 @@ export default defineComponent({
   setup(props, {emit}) {
     let activatedTalkID = ref('');
     let activatedPendingTalkID = ref('');
+    const ps = ref(null)
+
+    onMounted(()=>{
+      const container = document.querySelector('.talk-left');
+      ps.value = new PerfectScrollbar(container);
+    })
 
     watch(activatedTalkID, val => {
       emit("activeTalkChanged", val)
