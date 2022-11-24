@@ -20,6 +20,14 @@ module.exports = defineConfig({
           "^/servicerapi": ""
         },
         "secure": false
+      },
+      "/grpcservicer": {
+        target: "http://127.0.0.1:22222",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/grpcservicer": ""
+        },
+        "secure": false
       }
     }
   }

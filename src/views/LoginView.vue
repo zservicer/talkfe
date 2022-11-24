@@ -60,11 +60,6 @@ export default {
 </script>
 
 <style scoped>
-label{
-  display: inline-block;
-  min-width: 200px;
-}
-
 .container{
   position: fixed;
   width: 100%;
@@ -78,7 +73,7 @@ label{
   right: 0;
   margin: 0 auto;
   width: 40%;
-  padding: 5px;
+  padding: 25px;
   text-align: center;
   box-shadow: 0 0 100px 10px black;
   border: 1px solid black;

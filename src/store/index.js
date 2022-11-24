@@ -39,6 +39,10 @@ export default createStore({
     customerUsername(state, val) {
       state.customerUsername = val
       localStorage.setItem("customer_username", val)
+    },
+    logout(state) {
+      state.servicerToken = ""
+      localStorage.setItem("servicer_token", "")
     }
   },
   actions: {

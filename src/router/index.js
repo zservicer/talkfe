@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import CustomerTalkView from "@/views/CustomerTalkView";
 import LoginView from "@/views/LoginView";
+import RegisterView from "@/views/RegisterView";
 
 const routes = [
   {
@@ -23,6 +24,14 @@ const routes = [
     component: LoginView,
     meta:{
       title: '登录'
+    },
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterView,
+    meta:{
+      title: '注册'
     },
   },
   {

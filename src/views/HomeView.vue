@@ -25,7 +25,7 @@ import {
   ServiceResponse,
   ServiceAttachRequest,
   ServiceDetachRequest, ServicePostMessage, TalkMessageW
-} from "../../js/talk_pb";
+} from "../../proto/talk_pb";
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
 

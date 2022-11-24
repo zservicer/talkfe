@@ -33,7 +33,7 @@ import {
   TalkOpenRequest,
   TalkRequest,
   TalkResponse,
-} from "../../js/talk_pb";
+} from "../../proto/talk_pb";
 import SocketService from "@/api/websocket";
 import {message} from "ant-design-vue";
 import {useStore} from "vuex";
