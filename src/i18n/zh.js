@@ -9,5 +9,8 @@ export default {
     password: '密码',
     checkPassword: '确认密码',
     submit: '提交',
+  },
+  tip: {
+    noEmpty: '此项不能为空'
   }
 }

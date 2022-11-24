@@ -9,5 +9,8 @@ export default {
     password: 'password',
     checkPassword: 'check password',
     submit: 'submit',
+  },
+  tip: {
+    noEmpty: 'please fill it'
   }
 }

@@ -1,18 +1,19 @@
 <template>
   <div class="center-container">
-    <a-card :title="$t('label.register')" :bordered="false" class="center-content" :hoverable="true">
+    <a-card :title="$t('label.register')" :bordered="false" class="center-content" :hoverable="true" style="text-align: left">
       <a-form ref="formRef" :model="formState" :label-col="labelCol" :rules="rules">
-        <a-form-item has-feedback :label="$t('label.userName')" name="username" :rules="[{ required: true, message: 'Please input your username!' }]">
-          <a-input v-model:value="formState.username" @keydown.enter="invokeTabKey" ref="userNameRef" autocomplete="new-password" />
+        <a-form-item has-feedback :label="$t('label.userName')" name="username" :rules="[{ required: true, message: $t('tip.noEmpty')}]">
+          <a-input v-model:value="formState.username" @keydown.enter="$invokeTabKey" ref="userNameRef" autocomplete="new-password" />
         </a-form-item>
         <a-form-item has-feedback :label="$t('label.password')" name="pass">
-          <a-input-password type="password" v-model:value="formState.password" @keydown.enter="invokeTabKey" />
+          <a-input-password type="password" v-model:value="formState.password" @keydown.enter="$invokeTabKey" />
         </a-form-item>
         <a-form-item has-feedback :label="$t('label.checkPassword')" name="checkPass">
           <a-input-password type="password" v-model:value="formState.checkPassword" @keydown.enter="doRegister" />
         </a-form-item>
-        <a-form-item>
+        <a-form-item style="text-align: center">
           <a-button type="primary" @click="doRegister">{{ $t('label.submit')}}</a-button>
+          <router-link to="/login"><a-button type="link" style="font-style:italic; float: right">我已经有账户了</a-button></router-link>
         </a-form-item>
       </a-form>
     </a-card>
@@ -58,26 +59,8 @@ export default {
           }
           localStorage.setItem('locale', ctx.$i18n.locale)
         })
-      }).catch((err) => {
-        console.log('err:', err)
+      }).catch(() => {
       });
-    }
-
-    const invokeTabKey = () => {
-      let currInput = document.activeElement;
-      if (currInput.tagName.toLowerCase() === "input") {
-        const inputs = document.getElementsByTagName("input");
-        currInput = document.activeElement;
-        for (let i = 0; i < inputs.length; i++) {
-          if (inputs[i] === currInput) {
-            const next = inputs[i + 1];
-            if (next && next.focus) {
-              next.focus();
-            }
-            break;
-          }
-        }
-      }
     }
 
     const userNameRef = ref()
@@ -128,7 +111,6 @@ export default {
       formState,
       doRegister,
       labelCol: { style: { "min-width": '120px' } },
-      invokeTabKey,
     }
   }
 }

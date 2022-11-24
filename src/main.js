@@ -43,3 +43,22 @@ router.beforeEach((to, from, next) => {
 
 app.use(grpc_api)
 app.use(i18n)
+
+const invokeTabKey = () => {
+    let currInput = document.activeElement;
+    if (currInput.tagName.toLowerCase() === "input") {
+        const inputs = document.getElementsByTagName("input");
+        currInput = document.activeElement;
+        for (let i = 0; i < inputs.length; i++) {
+            if (inputs[i] === currInput) {
+                const next = inputs[i + 1];
+                if (next && next.focus) {
+                    next.focus();
+                }
+                break;
+            }
+        }
+    }
+}
+
+app.config.globalProperties.$invokeTabKey = invokeTabKey
