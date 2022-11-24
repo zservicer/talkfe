@@ -9,6 +9,7 @@ import moment from "moment";
 import PerfectScrollbar from 'vue3-perfect-scrollbar'
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 import grpc_api from "@/api/grpc_api";
+import i18n from '@/i18n/index'
 
 const app = createApp(App).use(Button).use(Switch).use(Collapse).use(List).use(Avatar).use(Row).use(Col)
 app.use(Badge).use(Image).use(Comment).use(Input).use(Form).use(Upload).use(Card)
@@ -41,3 +42,4 @@ router.beforeEach((to, from, next) => {
 })
 
 app.use(grpc_api)
+app.use(i18n)

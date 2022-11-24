@@ -10,12 +10,12 @@ function getServicerToken() {
 }
 
 function getLocalStringValue(key) {
-  const token = localStorage.getItem(key)
-  if (token === undefined || token === null) {
+  const v = localStorage.getItem(key)
+  if (v === undefined || v === null) {
     return ''
   }
 
-  return token
+  return v
 }
 
 export default createStore({

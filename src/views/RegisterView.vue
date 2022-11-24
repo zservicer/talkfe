@@ -1,18 +1,18 @@
 <template>
   <div class="center-container">
-    <a-card title="注册" :bordered="false" class="center-content" :hoverable="true">
+    <a-card :title="$t('label.register')" :bordered="false" class="center-content" :hoverable="true">
       <a-form ref="formRef" :model="formState" :label-col="labelCol" :rules="rules">
-        <a-form-item has-feedback label="用户名" name="username" :rules="[{ required: true, message: 'Please input your username!' }]">
+        <a-form-item has-feedback :label="$t('label.userName')" name="username" :rules="[{ required: true, message: 'Please input your username!' }]">
           <a-input v-model:value="formState.username" @keydown.enter="invokeTabKey" ref="userNameRef" autocomplete="new-password" />
         </a-form-item>
-        <a-form-item has-feedback label="密码" name="pass">
+        <a-form-item has-feedback :label="$t('label.password')" name="pass">
           <a-input-password type="password" v-model:value="formState.password" @keydown.enter="invokeTabKey" />
         </a-form-item>
-        <a-form-item has-feedback label="确认密码" name="checkPass">
+        <a-form-item has-feedback :label="$t('label.checkPassword')" name="checkPass">
           <a-input-password type="password" v-model:value="formState.checkPassword" @keydown.enter="doRegister" />
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" @click="doRegister">提交</a-button>
+          <a-button type="primary" @click="doRegister">{{ $t('label.submit')}}</a-button>
         </a-form-item>
       </a-form>
     </a-card>
@@ -23,12 +23,15 @@
 import {getCurrentInstance, onMounted, reactive, ref} from "vue";
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
+import {useI18n} from "vue-i18n";
 
 export default {
   name: 'RegisterView',
   setup() {
     const instance = getCurrentInstance();
     const ctx = instance.appContext.config.globalProperties;
+
+    const { t } = useI18n()
 
     const formState = reactive({
       username: '',
@@ -47,6 +50,13 @@ export default {
           router.push('/')
         }).catch((e) => {
           console.log(e)
+          ctx.$message.error(t('comm.exception') + ":" + e)
+          if (ctx.$i18n.locale === 'zh') {
+            ctx.$i18n.locale = 'en'
+          } else {
+            ctx.$i18n.locale = 'zh'
+          }
+          localStorage.setItem('locale', ctx.$i18n.locale)
         })
       }).catch((err) => {
         console.log('err:', err)
@@ -117,7 +127,7 @@ export default {
       rules,
       formState,
       doRegister,
-      labelCol: { style: { "min-width": '100px' } },
+      labelCol: { style: { "min-width": '120px' } },
       invokeTabKey,
     }
   }
