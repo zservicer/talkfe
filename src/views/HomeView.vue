@@ -106,6 +106,14 @@ export default {
           break
         }
       }
+
+      for (let idx = 0; idx < pendingTalks.value.length; idx++) {
+        if (pendingTalks.value[idx].talkId === talkId) {
+          pendingTalks.value.splice(idx, 1)
+
+          break
+        }
+      }
     }
 
 
